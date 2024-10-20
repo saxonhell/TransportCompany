@@ -1,0 +1,91 @@
+﻿@model IEnumerable<TransportCompanyWeb.Models.Car>
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RegistrationNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BodyNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EngineNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YearOfManufacture)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastMaintenanceDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Driver)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mechanic)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegistrationNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BodyNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EngineNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YearOfManufacture)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastMaintenanceDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarType.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Driver.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mechanic.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>

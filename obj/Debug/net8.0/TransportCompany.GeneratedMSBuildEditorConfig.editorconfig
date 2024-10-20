@@ -1,0 +1,175 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = TransportCompany
+build_property.RootNamespace = TransportCompany
+build_property.ProjectDir = C:\Users\saxon\OneDrive\Рабочий стол\TransportCompany\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\saxon\OneDrive\Рабочий стол\TransportCompany
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarBrands/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyQnJhbmRzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarBrands/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyQnJhbmRzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarBrands/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyQnJhbmRzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarBrands/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyQnJhbmRzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarBrands/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyQnJhbmRzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cargoes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29lc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cargoes/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29lc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cargoes/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29lc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cargoes/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29lc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cargoes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29lc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CargoTypes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29UeXBlc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CargoTypes/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29UeXBlc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CargoTypes/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29UeXBlc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CargoTypes/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29UeXBlc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CargoTypes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ29UeXBlc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cars/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2Fyc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cars/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2Fyc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cars/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2Fyc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cars/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2Fyc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Cars/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2Fyc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarTypes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyVHlwZXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarTypes/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyVHlwZXNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarTypes/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyVHlwZXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarTypes/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyVHlwZXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/CarTypes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyVHlwZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Employees/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Employees/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Employees/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Employees/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Employees/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Trips/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJpcHNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Trips/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJpcHNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Trips/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJpcHNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Trips/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJpcHNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/Trips/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJpcHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saxon/OneDrive/Рабочий стол/TransportCompany/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 

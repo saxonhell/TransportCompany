@@ -1,0 +1,90 @@
+﻿@model TransportCompanyWeb.Models.Trip
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>Trip</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="CarId" class="control-label"></label>
+                <select asp-for="CarId" class="form-control" asp-items="ViewBag.CarId"></select>
+                <span asp-validation-for="CarId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer" class="control-label"></label>
+                <input asp-for="Customer" class="form-control" />
+                <span asp-validation-for="Customer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Origin" class="control-label"></label>
+                <input asp-for="Origin" class="form-control" />
+                <span asp-validation-for="Origin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Destination" class="control-label"></label>
+                <input asp-for="Destination" class="form-control" />
+                <span asp-validation-for="Destination" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartureDate" class="control-label"></label>
+                <input asp-for="DepartureDate" class="form-control" />
+                <span asp-validation-for="DepartureDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArrivalDate" class="control-label"></label>
+                <input asp-for="ArrivalDate" class="form-control" />
+                <span asp-validation-for="ArrivalDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CargoId" class="control-label"></label>
+                <select asp-for="CargoId" class="form-control" asp-items="ViewBag.CargoId"></select>
+                <span asp-validation-for="CargoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentStatus" class="control-label"></label>
+                <input asp-for="PaymentStatus" class="form-control" />
+                <span asp-validation-for="PaymentStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReturnStatus" class="control-label"></label>
+                <input asp-for="ReturnStatus" class="form-control" />
+                <span asp-validation-for="ReturnStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DriverId" class="control-label"></label>
+                <select asp-for="DriverId" class="form-control" asp-items="ViewBag.DriverId"></select>
+                <span asp-validation-for="DriverId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>
