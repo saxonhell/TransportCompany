@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TransportCompanyWeb.Models.Employee>
+﻿@model IEnumerable<TransportCompany.Models.Employee>
 
 @{
     Layout = "_Layout";
@@ -15,6 +15,27 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<!-- Форма для фильтрации -->
+<form method="get" asp-action="Index">
+    <div>
+        <label>Name:</label>
+        <input type="text" name="nameFilter" value="@ViewBag.NameFilter" />
+    </div>
+        <div>
+            <label>Role:</label>
+            <select name="roleFilter">
+                <option value="">-- All Roles --</option>
+                @foreach (var role in (IEnumerable<SelectListItem>)ViewBag.Roles)
+                {
+                    <option value="@role.Value" selected="@(role.Selected)">@role.Text</option>
+                }
+            </select>
+        </div>
+
+    <button type="submit">Filter</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -45,5 +66,16 @@
 }
     </tbody>
 </table>
+
+<!-- Подключение общего представления пагинации -->
+@{
+    ViewData["CurrentPage"] = ViewBag.CurrentPage;
+    ViewData["PageSize"] = ViewBag.PageSize;
+    ViewData["TotalItems"] = ViewBag.TotalItems;
+    ViewData["ActionName"] = "Index"; // Название действия
+    ViewData["ControllerName"] = "Employees"; // Название контроллера
+}
+<partial name="_Pagination" />
+
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿@model TransportCompanyWeb.Models.Cargo
+﻿@model TransportCompany.Models.Cargo
 
 @{
     Layout = "_Layout";
@@ -39,7 +39,7 @@
             @Html.DisplayNameFor(model => model.CargoType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CargoType.Id)
+            @Html.DisplayFor(model => model.CargoType.Name)
         </dd>
     </dl>
 </div>

@@ -1,30 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TransportCompanyWeb.Data;
-using TransportCompanyWeb.Models;
+using TransportCompany.Data;
+using TransportCompany.Models;
+using TransportCompany.Service;
 
 namespace TransportCompany.Controllers
 {
     public class CargoTypesController : Controller
     {
         private readonly TransportCompanyContext _context;
+        private readonly CachedDataService _cachedDataService;
 
-        public CargoTypesController(TransportCompanyContext context)
+        public CargoTypesController(TransportCompanyContext context, CachedDataService cachedDataService)
         {
             _context = context;
+            _cachedDataService = cachedDataService;
         }
 
         // GET: CargoTypes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameFilter, int? carTypeFilter, int page = 1, int pageSize = 20)
         {
-            var transportCompanyContext = _context.CargoTypes.Include(c => c.CarType);
-            return View(await transportCompanyContext.ToListAsync());
+            var modelsQuery = _cachedDataService.GetCargoTypes(); // Получаем все записи
+
+            // Фильтрация
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                modelsQuery = modelsQuery.Where(cargoType => cargoType.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (carTypeFilter.HasValue)
+            {
+                modelsQuery = modelsQuery.Where(cargoType => cargoType.CarTypeId == carTypeFilter.Value);
+            }
+
+            // Пагинация
+            int totalItems = modelsQuery.Count(); // Общее количество записей
+            var cargoTypes = modelsQuery
+                .Skip((page - 1) * pageSize) // Пропускаем записи для предыдущих страниц
+                .Take(pageSize) // Берем только записи текущей страницы
+                .ToList();
+
+            // Передаем данные во ViewBag для сохранения фильтров и создания пагинации
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.NameFilter = nameFilter;
+            ViewBag.CarTypeFilter = carTypeFilter;
+
+            // Передаем список типов автомобилей для фильтрации
+            ViewBag.CarTypes = new SelectList(_context.CarTypes, "Id", "Name", carTypeFilter);
+
+            return View(cargoTypes);
         }
+
 
         // GET: CargoTypes/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -34,9 +68,8 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var cargoType = await _context.CargoTypes
-                .Include(c => c.CarType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cargoType = _cachedDataService.GetCargoTypes()
+                .FirstOrDefault(m => m.Id == id);
             if (cargoType == null)
             {
                 return NotFound();
@@ -48,13 +81,11 @@ namespace TransportCompany.Controllers
         // GET: CargoTypes/Create
         public IActionResult Create()
         {
-            ViewData["CarTypeId"] = new SelectList(_context.CarTypes, "Id", "Id");
+            ViewData["CarTypeId"] = new SelectList(_context.CarTypes, "Id", "Name");
             return View();
         }
 
         // POST: CargoTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,CarTypeId,Description")] CargoType cargoType)
@@ -82,13 +113,11 @@ namespace TransportCompany.Controllers
             {
                 return NotFound();
             }
-            ViewData["CarTypeId"] = new SelectList(_context.CarTypes, "Id", "Id", cargoType.CarTypeId);
+            ViewData["CarTypeId"] = new SelectList(_context.CarTypes, "Id", "Name", cargoType.CarTypeId);
             return View(cargoType);
         }
 
         // POST: CargoTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CarTypeId,Description")] CargoType cargoType)

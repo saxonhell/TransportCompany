@@ -1,29 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TransportCompanyWeb.Data;
-using TransportCompanyWeb.Models;
+using TransportCompany.Data;
+using TransportCompany.Models;
+using TransportCompany.Service;
 
 namespace TransportCompany.Controllers
 {
     public class CarTypesController : Controller
     {
         private readonly TransportCompanyContext _context;
+        private readonly CachedDataService _cachedDataService;
 
-        public CarTypesController(TransportCompanyContext context)
+        public CarTypesController(TransportCompanyContext context, CachedDataService cachedDataService)
         {
             _context = context;
+            _cachedDataService = cachedDataService;
         }
 
         // GET: CarTypes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameFilter, string descriptionFilter, int page = 1, int pageSize = 20)
         {
-            return View(await _context.CarTypes.ToListAsync());
+            var modelsQuery = _cachedDataService.GetCarTypes(); // Получаем все записи
+
+            // Фильтрация
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                modelsQuery = modelsQuery.Where(carType => carType.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(descriptionFilter))
+            {
+                modelsQuery = modelsQuery.Where(carType => carType.Description.Contains(descriptionFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Пагинация
+            int totalItems = modelsQuery.Count(); // Общее количество записей
+            var carTypes = modelsQuery
+                .Skip((page - 1) * pageSize) // Пропускаем записи для предыдущих страниц
+                .Take(pageSize) // Берем только записи текущей страницы
+                .ToList();
+
+            // Передаем данные во ViewBag для сохранения фильтров и создания пагинации
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.NameFilter = nameFilter;
+            ViewBag.DescriptionFilter = descriptionFilter;
+
+            return View(carTypes);
         }
+
 
         // GET: CarTypes/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -33,8 +65,8 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var carType = await _context.CarTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var carType = _cachedDataService.GetCarTypes()
+                .FirstOrDefault(m => m.Id == id);
             if (carType == null)
             {
                 return NotFound();
@@ -50,8 +82,6 @@ namespace TransportCompany.Controllers
         }
 
         // POST: CarTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description")] CarType carType)
@@ -82,8 +112,6 @@ namespace TransportCompany.Controllers
         }
 
         // POST: CarTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] CarType carType)

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TransportCompanyWeb.Models.CarBrand>
+﻿@model IEnumerable<TransportCompany.Models.CarBrand>
 
 @{
     Layout = "_Layout";
@@ -10,47 +10,72 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
-    <a href="~/../../рабочий стол/transportcompany/views/carbrands/index.cshtml">~/../../рабочий стол/transportcompany/views/carbrands/index.cshtml</a>
 </head>
 <body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TechnicalSpecifications)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TechnicalSpecifications)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+
+    <!-- Форма фильтрации -->
+    <form method="get" asp-action="Index">
+        <div>
+            <label>Name:</label>
+            <input type="text" name="nameFilter" value="@ViewBag.NameFilter" />
+        </div>
+        <div>
+            <label>Technical Specifications:</label>
+            <input type="text" name="technicalSpecificationsFilter" value="@ViewBag.TechnicalSpecificationsFilter" />
+        </div>
+        <button type="submit">Filter</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TechnicalSpecifications)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TechnicalSpecifications)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Подключение общего представления пагинации -->
+    @{
+        ViewData["CurrentPage"] = ViewBag.CurrentPage;
+        ViewData["PageSize"] = ViewBag.PageSize;
+        ViewData["TotalItems"] = ViewBag.TotalItems;
+        ViewData["ActionName"] = "Index"; // Название действия
+        ViewData["ControllerName"] = "CarBrands"; // Название контроллера
+    }
+    <partial name="_Pagination" />
+
 </body>
 </html>

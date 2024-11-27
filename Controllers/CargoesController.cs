@@ -1,30 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TransportCompanyWeb.Data;
-using TransportCompanyWeb.Models;
+using TransportCompany.Data;
+using TransportCompany.Models;
+using TransportCompany.Service;
 
 namespace TransportCompany.Controllers
 {
     public class CargoesController : Controller
     {
         private readonly TransportCompanyContext _context;
+        private readonly CachedDataService _cachedDataService;
 
-        public CargoesController(TransportCompanyContext context)
+        public CargoesController(TransportCompanyContext context, CachedDataService cachedDataService)
         {
             _context = context;
+            _cachedDataService = cachedDataService;
         }
 
         // GET: Cargoes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameFilter, int? cargoTypeFilter, int page = 1, int pageSize = 20)
         {
-            var transportCompanyContext = _context.Cargos.Include(c => c.CargoType);
-            return View(await transportCompanyContext.ToListAsync());
+            var modelsQuery = _cachedDataService.GetCargos(); // Получаем все записи
+
+            // Фильтрация
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                modelsQuery = modelsQuery.Where(cargo => cargo.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (cargoTypeFilter.HasValue)
+            {
+                modelsQuery = modelsQuery.Where(cargo => cargo.CargoTypeId == cargoTypeFilter.Value);
+            }
+
+            // Пагинация
+            int totalItems = modelsQuery.Count(); // Общее количество записей
+            var cargoes = modelsQuery
+                .Skip((page - 1) * pageSize) // Пропускаем записи для предыдущих страниц
+                .Take(pageSize) // Берем только записи текущей страницы
+                .ToList();
+
+            // Передаем данные во ViewBag для сохранения фильтров и создания пагинации
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.NameFilter = nameFilter;
+            ViewBag.CargoTypeFilter = cargoTypeFilter;
+
+            // Передаем список типов грузов для фильтрации
+            ViewBag.CargoTypes = new SelectList(_context.CargoTypes, "Id", "Name", cargoTypeFilter);
+
+            return View(cargoes);
         }
+
+
 
         // GET: Cargoes/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -34,9 +69,8 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var cargo = await _context.Cargos
-                .Include(c => c.CargoType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cargo = _cachedDataService.GetCargos()
+                .FirstOrDefault(m => m.Id == id);
             if (cargo == null)
             {
                 return NotFound();
@@ -48,13 +82,11 @@ namespace TransportCompany.Controllers
         // GET: Cargoes/Create
         public IActionResult Create()
         {
-            ViewData["CargoTypeId"] = new SelectList(_context.CargoTypes, "Id", "Id");
+            ViewData["CargoTypeId"] = new SelectList(_context.CargoTypes, "Id", "Name");
             return View();
         }
 
         // POST: Cargoes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,CargoTypeId,ExpiryDate,Features")] Cargo cargo)
@@ -65,7 +97,7 @@ namespace TransportCompany.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CargoTypeId"] = new SelectList(_context.CargoTypes, "Id", "Id", cargo.CargoTypeId);
+            ViewData["CargoTypeId"] = new SelectList(_context.CargoTypes, "Id", "Name", cargo.CargoTypeId);
             return View(cargo);
         }
 
@@ -82,13 +114,12 @@ namespace TransportCompany.Controllers
             {
                 return NotFound();
             }
-            ViewData["CargoTypeId"] = new SelectList(_context.CargoTypes, "Id", "Id", cargo.CargoTypeId);
+            ViewData["CargoTypeId"] = new SelectList(_context.CargoTypes, "Id", "Name", cargo.CargoTypeId);
             return View(cargo);
         }
 
+
         // POST: Cargoes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CargoTypeId,ExpiryDate,Features")] Cargo cargo)
@@ -118,7 +149,7 @@ namespace TransportCompany.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CargoTypeId"] = new SelectList(_context.CargoTypes, "Id", "Id", cargo.CargoTypeId);
+            ViewData["CargoTypeId"] = new SelectList(_context.CargoTypes, "Id", "TypeName", cargo.CargoTypeId); // Повторяем передачу данных при ошибке валидации
             return View(cargo);
         }
 

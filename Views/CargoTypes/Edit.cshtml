@@ -1,4 +1,4 @@
-﻿@model TransportCompanyWeb.Models.CargoType
+﻿@model TransportCompany.Models.CargoType
 
 @{
     Layout = "_Layout";
@@ -26,7 +26,7 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CarTypeId" class="control-label"></label>
+                <label asp-for="CarTypeId" class="control-label">Car Type</label>
                 <select asp-for="CarTypeId" class="form-control" asp-items="ViewBag.CarTypeId"></select>
                 <span asp-validation-for="CarTypeId" class="text-danger"></span>
             </div>

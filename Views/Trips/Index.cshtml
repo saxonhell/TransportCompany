@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TransportCompanyWeb.Models.Trip>
+﻿@model IEnumerable<TransportCompany.Models.Trip>
 
 @{
     Layout = "_Layout";
@@ -15,6 +15,41 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<!-- Форма для фильтрации -->
+<form method="get" asp-action="Index">
+    <div>
+        <label>Customer:</label>
+        <input type="text" name="customerFilter" value="@ViewBag.CustomerFilter" />
+    </div>
+    <div>
+        <label>Origin:</label>
+        <input type="text" name="originFilter" value="@ViewBag.OriginFilter" />
+    </div>
+    <div>
+        <label>Destination:</label>
+        <input type="text" name="destinationFilter" value="@ViewBag.DestinationFilter" />
+    </div>
+    <div>
+        <label>Payment Status:</label>
+        <select name="paymentStatusFilter">
+            <option value="">-- All --</option>
+                <option value="true" selected="@(ViewBag.PaymentStatusFilter == true)">Paid</option>
+                <option value="false" selected="@(ViewBag.PaymentStatusFilter == false)">Unpaid</option>
+
+        </select>
+    </div>
+    <div>
+        <label>Return Status:</label>
+        <select name="returnStatusFilter">
+            <option value="">-- All --</option>
+                <option value="true" selected="@(ViewBag.ReturnStatusFilter == true)">Returned</option>
+                <option value="false" selected="@(ViewBag.ReturnStatusFilter == false)">Not Returned</option>
+        </select>
+    </div>
+    <button type="submit">Filter</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -82,13 +117,13 @@
                 @Html.DisplayFor(modelItem => item.ReturnStatus)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Car.Id)
+                @Html.DisplayFor(modelItem => item.Car.Brand.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cargo.Id)
+                @Html.DisplayFor(modelItem => item.Cargo.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Driver.Id)
+                @Html.DisplayFor(modelItem => item.Driver.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -99,5 +134,16 @@
 }
     </tbody>
 </table>
+
+<!-- Подключение общего представления пагинации -->
+@{
+    ViewData["CurrentPage"] = ViewBag.CurrentPage;
+    ViewData["PageSize"] = ViewBag.PageSize;
+    ViewData["TotalItems"] = ViewBag.TotalItems;
+    ViewData["ActionName"] = "Index"; // Название действия
+    ViewData["ControllerName"] = "Trips"; // Название контроллера
+}
+<partial name="_Pagination" />
+
 </body>
 </html>

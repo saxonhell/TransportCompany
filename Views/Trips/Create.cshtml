@@ -1,4 +1,4 @@
-﻿@model TransportCompanyWeb.Models.Trip
+﻿@model TransportCompany.Models.Trip
 
 @{
     Layout = "_Layout";
@@ -21,7 +21,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CarId" class="control-label"></label>
-                <select asp-for="CarId" class ="form-control" asp-items="ViewBag.CarId"></select>
+                    <select asp-for="CarId" class="form-control" asp-items="ViewBag.CarId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Customer" class="control-label"></label>
@@ -59,12 +59,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="PaymentStatus" class="control-label"></label>
-                <input asp-for="PaymentStatus" class="form-control" />
+                <select asp-for="PaymentStatus" class="form-control" asp-items="ViewBag.BooleanOptions"></select>
                 <span asp-validation-for="PaymentStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReturnStatus" class="control-label"></label>
-                <input asp-for="ReturnStatus" class="form-control" />
+                <select asp-for="ReturnStatus" class="form-control" asp-items="ViewBag.BooleanOptions"></select>
                 <span asp-validation-for="ReturnStatus" class="text-danger"></span>
             </div>
             <div class="form-group">

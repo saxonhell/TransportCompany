@@ -1,29 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TransportCompanyWeb.Data;
-using TransportCompanyWeb.Models;
+using TransportCompany.Data;
+using TransportCompany.Models;
+using TransportCompany.Service;
 
 namespace TransportCompany.Controllers
 {
     public class CarBrandsController : Controller
     {
         private readonly TransportCompanyContext _context;
+        private readonly CachedDataService _cachedDataService;
 
-        public CarBrandsController(TransportCompanyContext context)
+        public CarBrandsController(TransportCompanyContext context, CachedDataService cachedDataService)
         {
             _context = context;
+            _cachedDataService = cachedDataService;
         }
 
         // GET: CarBrands
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameFilter, string technicalSpecificationsFilter, int page = 1, int pageSize = 20)
         {
-            return View(await _context.CarBrands.ToListAsync());
+            var modelsQuery = _cachedDataService.GetCarBrands(); // Получаем записи
+
+            // Фильтрация
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                modelsQuery = modelsQuery.Where(carBrand => carBrand.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(technicalSpecificationsFilter))
+            {
+                modelsQuery = modelsQuery.Where(carBrand => carBrand.TechnicalSpecifications.Contains(technicalSpecificationsFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Пагинация
+            int totalItems = modelsQuery.Count(); // Общее количество записей
+            var carBrands = modelsQuery
+                .Skip((page - 1) * pageSize) // Пропускаем записи для предыдущих страниц
+                .Take(pageSize) // Берем только записи текущей страницы
+                .ToList();
+
+            // Передаем данные во ViewBag для создания пагинации и сохранения фильтров
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.NameFilter = nameFilter;
+            ViewBag.TechnicalSpecificationsFilter = technicalSpecificationsFilter;
+
+            return View(carBrands);
         }
+
 
         // GET: CarBrands/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -33,8 +65,8 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var carBrand = await _context.CarBrands
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var carBrand = _cachedDataService.GetCarBrands()
+                .FirstOrDefault(m => m.Id == id);
             if (carBrand == null)
             {
                 return NotFound();
@@ -50,8 +82,6 @@ namespace TransportCompany.Controllers
         }
 
         // POST: CarBrands/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,TechnicalSpecifications,Description")] CarBrand carBrand)
@@ -82,8 +112,6 @@ namespace TransportCompany.Controllers
         }
 
         // POST: CarBrands/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TechnicalSpecifications,Description")] CarBrand carBrand)

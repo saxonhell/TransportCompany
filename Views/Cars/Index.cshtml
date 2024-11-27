@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TransportCompanyWeb.Models.Car>
+﻿@model IEnumerable<TransportCompany.Models.Car>
 
 @{
     Layout = "_Layout";
@@ -12,80 +12,110 @@
     <title>Index</title>
 </head>
 <body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RegistrationNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BodyNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EngineNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.YearOfManufacture)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastMaintenanceDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CarType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Driver)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mechanic)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegistrationNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BodyNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EngineNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.YearOfManufacture)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastMaintenanceDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Brand.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CarType.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Driver.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mechanic.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+
+    <!-- Форма для фильтрации -->
+    <form method="get" asp-action="Index">
+        <div>
+            <label>Brand:</label>
+            <input type="text" name="brandFilter" value="@ViewBag.BrandFilter" />
+        </div>
+        <div>
+            <label>Year of Manufacture:</label>
+            <input type="number" name="yearFilter" value="@ViewBag.YearFilter" />
+        </div>
+        <div>
+            <label>Driver:</label>
+            <input type="text" name="driverFilter" value="@ViewBag.DriverFilter" />
+        </div>
+        <button type="submit">Filter</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RegistrationNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BodyNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EngineNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.YearOfManufacture)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastMaintenanceDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Brand)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CarType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Driver)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Mechanic)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegistrationNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BodyNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EngineNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.YearOfManufacture)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastMaintenanceDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Brand.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CarType.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mechanic.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Подключение общего представления пагинации -->
+    @{
+        ViewData["CurrentPage"] = ViewBag.CurrentPage;
+        ViewData["PageSize"] = ViewBag.PageSize;
+        ViewData["TotalItems"] = ViewBag.TotalItems;
+        ViewData["ActionName"] = "Index";
+        ViewData["ControllerName"] = "Cars";
+    }
+    <partial name="_Pagination" />
+
 </body>
 </html>

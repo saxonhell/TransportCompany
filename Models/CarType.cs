@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TransportCompanyWeb.Models;
+namespace TransportCompany.Models;
 
 public partial class CarType
 {

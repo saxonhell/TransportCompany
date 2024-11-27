@@ -1,30 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TransportCompanyWeb.Data;
-using TransportCompanyWeb.Models;
+using TransportCompany.Data;
+using TransportCompany.Models;
+using TransportCompany.Service;
 
 namespace TransportCompany.Controllers
 {
     public class TripsController : Controller
     {
         private readonly TransportCompanyContext _context;
+        private readonly CachedDataService _cachedDataService;
 
-        public TripsController(TransportCompanyContext context)
+        public TripsController(TransportCompanyContext context, CachedDataService cachedDataService)
         {
             _context = context;
+            _cachedDataService = cachedDataService;
         }
 
         // GET: Trips
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string customerFilter, string originFilter, string destinationFilter, bool? paymentStatusFilter, bool? returnStatusFilter, int page = 1, int pageSize = 20)
         {
-            var transportCompanyContext = _context.Trips.Include(t => t.Car).Include(t => t.Cargo).Include(t => t.Driver);
-            return View(await transportCompanyContext.ToListAsync());
+            var modelsQuery = _cachedDataService.GetTrips(); // Получаем все записи
+
+            // Фильтрация
+            if (!string.IsNullOrEmpty(customerFilter))
+            {
+                modelsQuery = modelsQuery.Where(trip => trip.Customer.Contains(customerFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(originFilter))
+            {
+                modelsQuery = modelsQuery.Where(trip => trip.Origin.Contains(originFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(destinationFilter))
+            {
+                modelsQuery = modelsQuery.Where(trip => trip.Destination.Contains(destinationFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (paymentStatusFilter.HasValue)
+            {
+                modelsQuery = modelsQuery.Where(trip => trip.PaymentStatus == paymentStatusFilter.Value);
+            }
+
+            if (returnStatusFilter.HasValue)
+            {
+                modelsQuery = modelsQuery.Where(trip => trip.ReturnStatus == returnStatusFilter.Value);
+            }
+
+            // Пагинация
+            int totalItems = modelsQuery.Count(); // Общее количество записей
+            var trips = modelsQuery
+                .Skip((page - 1) * pageSize) // Пропускаем записи для предыдущих страниц
+                .Take(pageSize) // Берем только записи текущей страницы
+                .ToList();
+
+            // Передаем данные во ViewBag для сохранения фильтров и создания пагинации
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.CustomerFilter = customerFilter;
+            ViewBag.OriginFilter = originFilter;
+            ViewBag.DestinationFilter = destinationFilter;
+            ViewBag.PaymentStatusFilter = paymentStatusFilter;
+            ViewBag.ReturnStatusFilter = returnStatusFilter;
+
+            return View(trips);
         }
+
 
         // GET: Trips/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -34,11 +83,8 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var trip = await _context.Trips
-                .Include(t => t.Car)
-                .Include(t => t.Cargo)
-                .Include(t => t.Driver)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var trip = _cachedDataService.GetTrips()
+                .FirstOrDefault(m => m.Id == id);
             if (trip == null)
             {
                 return NotFound();
@@ -50,15 +96,22 @@ namespace TransportCompany.Controllers
         // GET: Trips/Create
         public IActionResult Create()
         {
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Id");
-            ViewData["CargoId"] = new SelectList(_context.Cargos, "Id", "Id");
-            ViewData["DriverId"] = new SelectList(_context.Employees, "Id", "Id");
+            // TODO: Добавить считывание даннных с кэша, вместо контекста
+            ViewData["CarId"] = new SelectList(_cachedDataService.GetCars(), "Id", "Brand.Name");
+            ViewData["CargoId"] = new SelectList(_cachedDataService.GetCargos(), "Id", "CargoType.Name");
+            ViewData["DriverId"] = new SelectList(_cachedDataService.GetEmployees(), "Id", "Name");
+
+                    // Добавляем выбор для PaymentStatus и ReturnStatus
+            ViewData["BooleanOptions"] = new SelectList(new[]
+            {
+                new { Value = true, Text = "True" },
+                new { Value = false, Text = "False" }
+            },                      "Value", "Text");
+
             return View();
         }
 
         // POST: Trips/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CarId,Customer,Origin,Destination,DepartureDate,ArrivalDate,CargoId,Price,PaymentStatus,ReturnStatus,DriverId")] Trip trip)
@@ -83,16 +136,32 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var trip = await _context.Trips.FindAsync(id);
+            // TODO: Добавить считывание даннных с кэша, вместо контекста
+            var trip = await _context.Trips
+                .Include(t => t.Car)
+                .Include(t => t.Cargo)
+                .Include(t => t.Driver)
+                .FirstOrDefaultAsync(t => t.Id == id);
             if (trip == null)
             {
                 return NotFound();
             }
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Id", trip.CarId);
-            ViewData["CargoId"] = new SelectList(_context.Cargos, "Id", "Id", trip.CargoId);
-            ViewData["DriverId"] = new SelectList(_context.Employees, "Id", "Id", trip.DriverId);
+
+            // TODO: Добавить считывание даннных с кэша, вместо контекста
+            ViewData["CarId"] = new SelectList(_cachedDataService.GetCars(), "Id", "Brand.Name", trip.CarId);
+            ViewData["CargoId"] = new SelectList(_cachedDataService.GetCargos(), "Id", "CargoType.Name", trip.CargoId);
+            ViewData["DriverId"] = new SelectList(_cachedDataService.GetEmployees(), "Id", "Name", trip.DriverId);
+
+            // Добавляем выбор для PaymentStatus и ReturnStatus
+            ViewData["BooleanOptions"] = new SelectList(new[]
+            {
+                new { Value = true, Text = "True" },
+                new { Value = false, Text = "False" }
+            },                      "Value", "Text");
+
             return View(trip);
         }
+
 
         // POST: Trips/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

@@ -1,4 +1,4 @@
-﻿@model TransportCompanyWeb.Models.Trip
+﻿@model TransportCompany.Models.Trip
 
 @{
     Layout = "_Layout";
@@ -24,6 +24,18 @@
                 <label asp-for="CarId" class="control-label"></label>
                 <select asp-for="CarId" class="form-control" asp-items="ViewBag.CarId"></select>
                 <span asp-validation-for="CarId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CargoId" class="control-label"></label>
+                <select asp-for="CargoId" class="form-control" asp-items="ViewBag.CargoId"></select>
+                <span asp-validation-for="CargoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DriverId" class="control-label"></label>
+                <select asp-for="DriverId" class="form-control" asp-items="ViewBag.DriverId"></select>
+                <span asp-validation-for="DriverId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Customer" class="control-label"></label>
@@ -51,29 +63,19 @@
                 <span asp-validation-for="ArrivalDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CargoId" class="control-label"></label>
-                <select asp-for="CargoId" class="form-control" asp-items="ViewBag.CargoId"></select>
-                <span asp-validation-for="CargoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PaymentStatus" class="control-label"></label>
-                <input asp-for="PaymentStatus" class="form-control" />
+                <select asp-for="PaymentStatus" class="form-control" asp-items="ViewBag.BooleanOptions"></select>
                 <span asp-validation-for="PaymentStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReturnStatus" class="control-label"></label>
-                <input asp-for="ReturnStatus" class="form-control" />
+                <select asp-for="ReturnStatus" class="form-control" asp-items="ViewBag.BooleanOptions"></select>
                 <span asp-validation-for="ReturnStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DriverId" class="control-label"></label>
-                <select asp-for="DriverId" class="form-control" asp-items="ViewBag.DriverId"></select>
-                <span asp-validation-for="DriverId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

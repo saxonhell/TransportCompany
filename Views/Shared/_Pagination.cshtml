@@ -1,0 +1,94 @@
+﻿@{
+    int currentPage = ViewData["CurrentPage"] != null ? (int)ViewData["CurrentPage"] : 1;
+    int pageSize = ViewData["PageSize"] != null ? (int)ViewData["PageSize"] : 20;
+    int totalItems = ViewData["TotalItems"] != null ? (int)ViewData["TotalItems"] : 0;
+    string actionName = ViewData["ActionName"]?.ToString() ?? "Index";
+    string controllerName = ViewData["ControllerName"]?.ToString() ?? ViewContext.RouteData.Values["controller"].ToString();
+
+    int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+    // Создаем RouteValueDictionary для фильтров
+    var routeValues = new RouteValueDictionary();
+    foreach (var key in ViewData.Keys)
+    {
+        // Добавляем только фильтры, пропуская не нужные данные
+        if (key != "CurrentPage" && key != "PageSize" && key != "TotalItems" && key != "ActionName" && key != "ControllerName")
+        {
+            routeValues[key] = ViewData[key]?.ToString();
+        }
+    }
+    routeValues["pageSize"] = pageSize;
+
+    int startPage = Math.Max(1, currentPage - 2);
+    int endPage = Math.Min(totalPages, currentPage + 2);
+}
+
+<div class="pagination">
+    <ul class="pagination">
+        <!-- Previous Button -->
+        @if (currentPage > 1)
+        {
+            routeValues["page"] = currentPage - 1;
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action(actionName, controllerName, routeValues)">Previous</a>
+            </li>
+        }
+
+        <!-- First Page -->
+        @if (startPage > 1)
+        {
+            routeValues["page"] = 1;
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action(actionName, controllerName, routeValues)">1</a>
+            </li>
+            @if (startPage > 2)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            }
+        }
+
+        <!-- Page Numbers -->
+        @for (int i = startPage; i <= endPage; i++)
+        {
+            if (i == currentPage)
+            {
+                <li class="page-item active">
+                    <span class="page-link">@i</span>
+                </li>
+            }
+            else
+            {
+                routeValues["page"] = i;
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action(actionName, controllerName, routeValues)">@i</a>
+                </li>
+            }
+        }
+
+        <!-- Last Page -->
+        @if (endPage < totalPages)
+        {
+            @if (endPage < totalPages - 1)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            }
+            routeValues["page"] = totalPages;
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action(actionName, controllerName, routeValues)">@totalPages</a>
+            </li>
+        }
+
+        <!-- Next Button -->
+        @if (currentPage < totalPages)
+        {
+            routeValues["page"] = currentPage + 1;
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action(actionName, controllerName, routeValues)">Next</a>
+            </li>
+        }
+    </ul>
+</div>

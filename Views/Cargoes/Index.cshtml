@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TransportCompanyWeb.Models.Cargo>
+﻿@model IEnumerable<TransportCompany.Models.Cargo>
 
 @{
     Layout = "_Layout";
@@ -15,6 +15,26 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<!-- Форма для фильтрации -->
+<form method="get" asp-action="Index">
+    <div>
+        <label>Name:</label>
+        <input type="text" name="nameFilter" value="@ViewBag.NameFilter" />
+    </div>
+    <div>
+        <label>Cargo Type:</label>
+        <select name="cargoTypeFilter">
+            <option value="">-- All Types --</option>
+            @foreach (var type in (IEnumerable<SelectListItem>)ViewBag.CargoTypes)
+            {
+                <option value="@type.Value" selected="@(type.Selected)">@type.Text</option>
+            }
+        </select>
+    </div>
+    <button type="submit">Filter</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -46,7 +66,7 @@
                 @Html.DisplayFor(modelItem => item.Features)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CargoType.Id)
+                @Html.DisplayFor(modelItem => item.CargoType.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -57,5 +77,16 @@
 }
     </tbody>
 </table>
+
+<!-- Подключение общего представления пагинации -->
+@{
+    ViewData["CurrentPage"] = ViewBag.CurrentPage;
+    ViewData["PageSize"] = ViewBag.PageSize;
+    ViewData["TotalItems"] = ViewBag.TotalItems;
+    ViewData["ActionName"] = "Index"; // Название действия
+    ViewData["ControllerName"] = "Cargoes"; // Название контроллера
+}
+<partial name="_Pagination" />
+
 </body>
 </html>

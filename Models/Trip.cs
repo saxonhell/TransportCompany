@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TransportCompanyWeb.Models;
+namespace TransportCompany.Models;
 
 public partial class Trip
 {
@@ -29,9 +30,12 @@ public partial class Trip
 
     public int? DriverId { get; set; }
 
+    [ForeignKey("CarId")]
     public virtual Car? Car { get; set; }
 
+    [ForeignKey("CargoId")]
     public virtual Cargo? Cargo { get; set; }
 
+    [ForeignKey("DriverId")]
     public virtual Employee? Driver { get; set; }
 }
