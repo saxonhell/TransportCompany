@@ -35,6 +35,15 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="CarTypes" asp-action="Index">Модели машин</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Transportations" asp-action="Index">Транспортировка </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Fleet" asp-action="Index">Автопарк </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Journeys" asp-action="Index">Рейсы 2.0 </a>
+                </li>
                 @if (User.IsInRole("admin"))
                 {
                     <li class="nav-item">

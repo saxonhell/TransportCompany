@@ -15,25 +15,22 @@ namespace TransportCompany.Controllers
 {
     public class EmployeesController : Controller
     {
-        private readonly CachedDataService _cachedDataService;
         private readonly TransportCompanyContext _context;
 
-        public EmployeesController(CachedDataService cachedDataService, TransportCompanyContext transportCompanyContext)
+        public EmployeesController(TransportCompanyContext transportCompanyContext)
         {
-            _cachedDataService = cachedDataService;
             _context = transportCompanyContext;
         }
 
         // GET: Employees
         public async Task<IActionResult> Index(string nameFilter, string roleFilter, int page = 1, int pageSize = 20)
         {
-            Console.WriteLine($"NameFilter: {nameFilter}, RoleFilter: {roleFilter}");
-            var modelsQuery = _cachedDataService.GetEmployees(); // Получаем все записи
+            var modelsQuery = _context.Employees.AsQueryable();
 
             // Фильтрация по имени
             if (!string.IsNullOrEmpty(nameFilter))
             {
-                modelsQuery = modelsQuery.Where(employee => employee.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+                modelsQuery = modelsQuery.Where(employee => EF.Functions.Like(employee.Name, $"%{nameFilter}%"));
             }
 
             // Фильтрация по роли
@@ -43,20 +40,18 @@ namespace TransportCompany.Controllers
             }
 
             // Пагинация
-            int totalItems = modelsQuery.Count(); // Общее количество записей
-            var employees = modelsQuery
+            int totalItems = await modelsQuery.CountAsync(); // Общее количество записей
+            var employees = await modelsQuery
                 .Skip((page - 1) * pageSize) // Пропускаем записи для предыдущих страниц
                 .Take(pageSize) // Берем только записи текущей страницы
-                .ToList();
+                .ToListAsync();
 
-            // Передаем данные во ViewBag для сохранения фильтров
             ViewBag.CurrentPage = page;
             ViewBag.PageSize = pageSize;
             ViewBag.TotalItems = totalItems;
             ViewBag.NameFilter = nameFilter;
             ViewBag.RoleFilter = roleFilter;
 
-            // Передаем список ролей в выпадающий список
             ViewBag.Roles = new List<SelectListItem>
             {
                 new SelectListItem { Value = "Driver", Text = "Driver", Selected = roleFilter == "Driver" },
@@ -68,6 +63,7 @@ namespace TransportCompany.Controllers
 
 
 
+
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -76,7 +72,7 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var employee = _cachedDataService.GetEmployees()
+            var employee = _context.Employees
                 .FirstOrDefault(m => m.Id == id);
             if (employee == null)
             {

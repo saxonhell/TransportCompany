@@ -1,0 +1,49 @@
+﻿@model IEnumerable<TransportCompany.Models.Trip>
+
+@{
+    ViewData["Title"] = "Рейсы";
+}
+
+<h1>Рейсы</h1>
+
+<form method="get" class="form-inline">
+    <div class="form-group">
+        <label for="isPaid">Оплаченные</label>
+        <input type="checkbox" name="isPaid" value="true" @(ViewBag.IsPaid != null && (bool)ViewBag.IsPaid ? "checked" : "") />
+    </div>
+    <button type="submit" class="btn btn-primary">Фильтровать</button>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Автомобиль</th>
+            <th>Маршрут</th>
+            <th>Дата отправления</th>
+            <th>Цена</th>
+            <th>Статус оплаты</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trip in Model)
+        {
+            <tr>
+                <td>@trip.Car?.RegistrationNumber</td> <!-- Госномер автомобиля -->
+                <td>@trip.Origin - @trip.Destination</td> <!-- Маршрут -->
+                <td>@trip.DepartureDate?.ToString("dd.MM.yyyy")</td> <!-- Дата отправления -->
+                <td>@trip.Price</td> <!-- Цена -->
+                <td>@(trip.PaymentStatus == true ? "Оплачен" : "Не оплачен")</td> <!-- Статус оплаты -->
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Подключение общего представления пагинации -->
+@{
+    ViewData["CurrentPage"] = ViewBag.CurrentPage;
+    ViewData["PageSize"] = ViewBag.PageSize;
+    ViewData["TotalItems"] = ViewBag.TotalItems;
+    ViewData["ActionName"] = "Index";
+    ViewData["ControllerName"] = "Journeys";
+}
+<partial name="_Pagination" />

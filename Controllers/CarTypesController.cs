@@ -15,28 +15,25 @@ namespace TransportCompany.Controllers
     public class CarTypesController : Controller
     {
         private readonly TransportCompanyContext _context;
-        private readonly CachedDataService _cachedDataService;
 
-        public CarTypesController(TransportCompanyContext context, CachedDataService cachedDataService)
+        public CarTypesController(TransportCompanyContext context)
         {
             _context = context;
-            _cachedDataService = cachedDataService;
         }
 
-        // GET: CarTypes
         public async Task<IActionResult> Index(string nameFilter, string descriptionFilter, int page = 1, int pageSize = 20)
         {
-            var modelsQuery = _cachedDataService.GetCarTypes(); // Получаем все записи
+            var modelsQuery = _context.CarTypes.AsQueryable(); // Получаем все записи
 
             // Фильтрация
             if (!string.IsNullOrEmpty(nameFilter))
             {
-                modelsQuery = modelsQuery.Where(carType => carType.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+                modelsQuery = modelsQuery.Where(carType => EF.Functions.Like(carType.Name, $"%{nameFilter}%"));
             }
 
             if (!string.IsNullOrEmpty(descriptionFilter))
             {
-                modelsQuery = modelsQuery.Where(carType => carType.Description.Contains(descriptionFilter, StringComparison.OrdinalIgnoreCase));
+                modelsQuery = modelsQuery.Where(carType => EF.Functions.Like(carType.Description, $"%{descriptionFilter}%"));
             }
 
             // Пагинация
@@ -57,6 +54,7 @@ namespace TransportCompany.Controllers
         }
 
 
+
         // GET: CarTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -65,7 +63,7 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var carType = _cachedDataService.GetCarTypes()
+            var carType = _context.CarTypes
                 .FirstOrDefault(m => m.Id == id);
             if (carType == null)
             {

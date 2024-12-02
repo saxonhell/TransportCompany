@@ -15,28 +15,28 @@ namespace TransportCompany.Controllers
     public class CarBrandsController : Controller
     {
         private readonly TransportCompanyContext _context;
-        private readonly CachedDataService _cachedDataService;
 
-        public CarBrandsController(TransportCompanyContext context, CachedDataService cachedDataService)
+        public CarBrandsController(TransportCompanyContext context)
         {
             _context = context;
-            _cachedDataService = cachedDataService;
         }
 
         // GET: CarBrands
         public async Task<IActionResult> Index(string nameFilter, string technicalSpecificationsFilter, int page = 1, int pageSize = 20)
         {
-            var modelsQuery = _cachedDataService.GetCarBrands(); // Получаем записи
+            var modelsQuery = _context.CarBrands.AsQueryable(); // Получаем записи
 
             // Фильтрация
             if (!string.IsNullOrEmpty(nameFilter))
             {
-                modelsQuery = modelsQuery.Where(carBrand => carBrand.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+                modelsQuery = modelsQuery.Where(carBrand =>
+                    EF.Functions.Like(carBrand.Name, $"%{nameFilter}%"));
             }
 
             if (!string.IsNullOrEmpty(technicalSpecificationsFilter))
             {
-                modelsQuery = modelsQuery.Where(carBrand => carBrand.TechnicalSpecifications.Contains(technicalSpecificationsFilter, StringComparison.OrdinalIgnoreCase));
+                modelsQuery = modelsQuery.Where(carBrand =>
+                    EF.Functions.Like(carBrand.TechnicalSpecifications, $"%{technicalSpecificationsFilter}%"));
             }
 
             // Пагинация
@@ -65,7 +65,7 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var carBrand = _cachedDataService.GetCarBrands()
+            var carBrand = _context.CarBrands
                 .FirstOrDefault(m => m.Id == id);
             if (carBrand == null)
             {

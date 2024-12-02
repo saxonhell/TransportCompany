@@ -14,24 +14,22 @@ namespace TransportCompany.Controllers
     public class CarsController : Controller
     {
         private readonly TransportCompanyContext _context;
-        private readonly CachedDataService _cachedDataService;
 
-        public CarsController(TransportCompanyContext context, CachedDataService cachedDataService)
+        public CarsController(TransportCompanyContext context)
         {
             _context = context;
-            _cachedDataService = cachedDataService;
         }
 
         // GET: Cars
         public async Task<IActionResult> Index(string sortField, string sortDirection, string brandFilter, int? yearFilter, 
                                                string driverFilter, int page = 1, int pageSize = 20)
         {
-            var modelsQuery = _cachedDataService.GetCars(); // Получаем все записи
+            var modelsQuery = _context.Cars.AsQueryable(); // Получаем все записи
 
             // Фильтрация
             if (!string.IsNullOrEmpty(brandFilter))
             {
-                modelsQuery = modelsQuery.Where(car => car.Brand.Name.Contains(brandFilter));
+                modelsQuery = modelsQuery.Where(car => EF.Functions.Like(car.Brand.Name, $"%{brandFilter}%"));
             }
 
             if (yearFilter.HasValue)
@@ -41,13 +39,17 @@ namespace TransportCompany.Controllers
 
             if (!string.IsNullOrEmpty(driverFilter))
             {
-                modelsQuery = modelsQuery.Where(car => car.Driver.Name.Contains(driverFilter));
+                modelsQuery = modelsQuery.Where(car => EF.Functions.Like(car.Driver.Name, $"%{driverFilter}%"));
             }
 
             // Пагинация
             int totalItems = modelsQuery.Count();
             var cars = modelsQuery
                 .Skip((page - 1) * pageSize)
+                .Include(c => c.Brand)
+                .Include(c => c.CarType)
+                .Include(c => c.Driver)
+                .Include(c => c.Mechanic)
                 .Take(pageSize)
                 .ToList();
 
@@ -74,7 +76,11 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var car = _cachedDataService.GetCars()
+            var car = _context.Cars
+                .Include(c => c.Brand)
+                .Include(c => c.CarType)
+                .Include(c => c.Driver)
+                .Include(c => c.Mechanic)
                 .FirstOrDefault(m => m.Id == id);
             if (car == null)
             {

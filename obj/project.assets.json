@@ -8826,11 +8826,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\TransportCompany\\TransportCompany.csproj",
+      "projectUniqueName": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\TransportCompany.csproj",
       "projectName": "TransportCompany",
-      "projectPath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\TransportCompany\\TransportCompany.csproj",
+      "projectPath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\TransportCompany.csproj",
       "packagesPath": "C:\\Users\\saxon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\TransportCompany\\obj\\",
+      "outputPath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\saxon\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -8853,6 +8853,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -8923,7 +8928,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

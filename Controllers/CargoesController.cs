@@ -9,29 +9,29 @@ using Microsoft.EntityFrameworkCore;
 using TransportCompany.Data;
 using TransportCompany.Models;
 using TransportCompany.Service;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TransportCompany.Controllers
 {
     public class CargoesController : Controller
     {
         private readonly TransportCompanyContext _context;
-        private readonly CachedDataService _cachedDataService;
 
-        public CargoesController(TransportCompanyContext context, CachedDataService cachedDataService)
+        public CargoesController(TransportCompanyContext context)
         {
             _context = context;
-            _cachedDataService = cachedDataService;
         }
 
         // GET: Cargoes
         public async Task<IActionResult> Index(string nameFilter, int? cargoTypeFilter, int page = 1, int pageSize = 20)
         {
-            var modelsQuery = _cachedDataService.GetCargos(); // Получаем все записи
+            var modelsQuery = _context.Cargos.AsQueryable(); // Получаем все записи
 
             // Фильтрация
             if (!string.IsNullOrEmpty(nameFilter))
             {
-                modelsQuery = modelsQuery.Where(cargo => cargo.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+                modelsQuery = modelsQuery.Where(cargo =>
+                    EF.Functions.Like(cargo.Name, $"%{nameFilter}%"));
             }
 
             if (cargoTypeFilter.HasValue)
@@ -43,6 +43,7 @@ namespace TransportCompany.Controllers
             int totalItems = modelsQuery.Count(); // Общее количество записей
             var cargoes = modelsQuery
                 .Skip((page - 1) * pageSize) // Пропускаем записи для предыдущих страниц
+                .Include(c => c.CargoType)
                 .Take(pageSize) // Берем только записи текущей страницы
                 .ToList();
 
@@ -69,7 +70,8 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var cargo = _cachedDataService.GetCargos()
+            var cargo = _context.Cargos
+                .Include(c => c.CargoType)
                 .FirstOrDefault(m => m.Id == id);
             if (cargo == null)
             {

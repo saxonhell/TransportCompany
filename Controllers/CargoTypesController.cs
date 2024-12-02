@@ -15,23 +15,21 @@ namespace TransportCompany.Controllers
     public class CargoTypesController : Controller
     {
         private readonly TransportCompanyContext _context;
-        private readonly CachedDataService _cachedDataService;
 
-        public CargoTypesController(TransportCompanyContext context, CachedDataService cachedDataService)
+        public CargoTypesController(TransportCompanyContext context)
         {
             _context = context;
-            _cachedDataService = cachedDataService;
         }
 
         // GET: CargoTypes
         public async Task<IActionResult> Index(string nameFilter, int? carTypeFilter, int page = 1, int pageSize = 20)
         {
-            var modelsQuery = _cachedDataService.GetCargoTypes(); // Получаем все записи
+            var modelsQuery = _context.CargoTypes.AsQueryable(); // Получаем все записи
 
             // Фильтрация
             if (!string.IsNullOrEmpty(nameFilter))
             {
-                modelsQuery = modelsQuery.Where(cargoType => cargoType.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+                modelsQuery = modelsQuery.Where(cargoType => EF.Functions.Like(cargoType.Name, $"%{nameFilter}%"));
             }
 
             if (carTypeFilter.HasValue)
@@ -43,6 +41,7 @@ namespace TransportCompany.Controllers
             int totalItems = modelsQuery.Count(); // Общее количество записей
             var cargoTypes = modelsQuery
                 .Skip((page - 1) * pageSize) // Пропускаем записи для предыдущих страниц
+                .Include(c => c.CarType)
                 .Take(pageSize) // Берем только записи текущей страницы
                 .ToList();
 
@@ -68,7 +67,8 @@ namespace TransportCompany.Controllers
                 return NotFound();
             }
 
-            var cargoType = _cachedDataService.GetCargoTypes()
+            var cargoType = _context.CargoTypes
+                .Include(c => c.CarType)
                 .FirstOrDefault(m => m.Id == id);
             if (cargoType == null)
             {

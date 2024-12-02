@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TransportCompany.Models.Car>
+
+@{
+    ViewData["Title"] = "Автопарк";
+}
+
+<h1>Автопарк</h1>
+
+<form method="get" class="form-inline">
+    <div class="form-group">
+        <label for="carTypeFilter">Тип автомобиля</label>
+        @Html.DropDownList("carTypeFilter", (SelectList)ViewBag.CarTypes, "Все", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="carBrandFilter">Марка автомобиля</label>
+        @Html.DropDownList("carBrandFilter", (SelectList)ViewBag.CarBrands, "Все", new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Фильтровать</button>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Марка</th>
+            <th>Тип</th>
+            <th>Гос. номер</th>
+            <th>Водитель</th>
+            <th>Механик</th>
+            <th>Год выпуска</th>
+            <th>Дата последнего ТО</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var car in Model)
+        {
+            <tr>
+                <td>@car.Brand?.Name</td>
+                <td>@car.CarType?.Name</td>
+                <td>@car.RegistrationNumber</td>
+                <td>@car.Driver?.Name</td>
+                <td>@car.Mechanic?.Name</td>
+                <td>@car.YearOfManufacture</td>
+                <td>@car.LastMaintenanceDate?.ToString("dd.MM.yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Подключение общего представления пагинации -->
+@{
+    ViewData["CurrentPage"] = ViewBag.CurrentPage;
+    ViewData["PageSize"] = ViewBag.PageSize;
+    ViewData["TotalItems"] = ViewBag.TotalItems;
+    ViewData["ActionName"] = "Index";
+    ViewData["ControllerName"] = "Fleet";
+}
+<partial name="_Pagination" />

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<TransportCompany.Models.Trip>
+
+@{
+    ViewData["Title"] = "Транспортировка";
+}
+
+<h1>Транспортировка</h1>
+
+<form method="get" class="form-inline">
+    <div class="form-group">
+        <label for="driverId">Водитель</label>
+        @Html.DropDownList("driverId", (SelectList)ViewBag.Drivers, "Все", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="carId">Автомобиль</label>
+        @Html.DropDownList("carId", (SelectList)ViewBag.Cars, "Все", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="startDate">Дата начала</label>
+        <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="endDate">Дата окончания</label>
+        <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Фильтровать</button>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Груз</th>
+            <th>Автомобиль</th>
+            <th>Водитель</th>
+            <th>Дата отправления</th>
+            <th>Дата прибытия</th>
+            <th>Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trip in Model)
+        {
+            <tr>
+                <td>@trip.Cargo.Name</td>
+                <td>@trip.Car.RegistrationNumber</td>
+                <td>@trip.Driver.Name</td>
+                <td>@trip.DepartureDate?.ToString("dd.MM.yyyy")</td>
+                <td>@trip.ArrivalDate?.ToString("dd.MM.yyyy")</td>
+                <td>@trip.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!-- Подключение общего представления пагинации -->
+@{
+    ViewData["CurrentPage"] = ViewBag.CurrentPage;
+    ViewData["PageSize"] = ViewBag.PageSize;
+    ViewData["TotalItems"] = ViewBag.TotalItems;
+    ViewData["ActionName"] = "Index";
+    ViewData["ControllerName"] = "Transportations";
+}
+<partial name="_Pagination" />
