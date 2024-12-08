@@ -188,6 +188,7 @@ namespace TransportCompany.Controllers
             var employee = await _context.Employees
                 .Include(e => e.CarDrivers)  // Водители
                 .Include(e => e.CarMechanics)  // Механики
+                .Include(e => e.Trips)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (employee != null)

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\курсач\\TransportCompany\\TransportCompany.csproj": {}
+    "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\TransportCompany.csproj": {}
   },
   "projects": {
-    "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\курсач\\TransportCompany\\TransportCompany.csproj": {
+    "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\TransportCompany.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\курсач\\TransportCompany\\TransportCompany.csproj",
+        "projectUniqueName": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\TransportCompany.csproj",
         "projectName": "TransportCompany",
-        "projectPath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\курсач\\TransportCompany\\TransportCompany.csproj",
+        "projectPath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\TransportCompany.csproj",
         "packagesPath": "C:\\Users\\saxon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\курсач\\TransportCompany\\obj\\",
+        "outputPath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\saxon\\AppData\\Roaming\\NuGet\\NuGet.Config",
