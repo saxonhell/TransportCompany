@@ -202,15 +202,28 @@ namespace TransportCompany.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var car = await _context.Cars.FindAsync(id);
+            var car = await _context.Cars
+                .Include(c => c.Trips)  // Загружаем связанные Trips, если нужно
+                .Include(c => c.Driver)
+                .Include(c => c.Mechanic)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
             if (car != null)
             {
+                // Удаляем все связанные поездки (если нужно)
+                foreach (var trip in car.Trips.ToList())
+                {
+                    _context.Trips.Remove(trip);
+                }
+
+                // Удаляем саму машину
                 _context.Cars.Remove(car);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool CarExists(int id)
         {

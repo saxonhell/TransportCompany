@@ -11,7 +11,7 @@ using TransportCompany.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DBConnection")
-    ?? throw new InvalidOperationException("Connection string 'DBConnection' not found.");
+    ?? throw new InvalidOperationException("Строка подключения не найдена.");
 
 
 // Регистрация TransportCompanyContext

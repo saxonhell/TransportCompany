@@ -151,6 +151,7 @@ namespace TransportCompany.Controllers
             }
 
             var carType = await _context.CarTypes
+                .Include(ct => ct.Cars)  // Подключаем связанные машины
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (carType == null)
             {
@@ -165,15 +166,30 @@ namespace TransportCompany.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var carType = await _context.CarTypes.FindAsync(id);
+            var carType = await _context.CarTypes
+                .Include(ct => ct.CargoTypes)  // Подключаем связанные типы грузов
+                .Include(ct => ct.Cars)
+                .ThenInclude(ct => ct.Trips)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (carType != null)
             {
+                foreach (var car in carType.Cars.ToList())
+                {
+                    foreach (var trip in car.Trips.ToList())
+                    {
+                        _context.Trips.Remove(trip);
+                    }
+                    _context.Cars.Remove(car);
+                }
+                // Каскадное удаление всех типов грузов, связанных с этим типом машины
                 _context.CarTypes.Remove(carType);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private bool CarTypeExists(int id)
         {

@@ -62,6 +62,7 @@ namespace TransportCompany.Controllers
 
 
 
+
         // GET: Cargoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -164,7 +165,7 @@ namespace TransportCompany.Controllers
             }
 
             var cargo = await _context.Cargos
-                .Include(c => c.CargoType)
+                .Include(c => c.Trips)  // Подключаем связанные поездки
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cargo == null)
             {
@@ -179,15 +180,26 @@ namespace TransportCompany.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cargo = await _context.Cargos.FindAsync(id);
+            var cargo = await _context.Cargos
+                .Include(c => c.Trips)  // Подключаем связанные поездки
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cargo != null)
             {
+                // Удаляем все связанные поездки
+                foreach (var trip in cargo.Trips.ToList())
+                {
+                    _context.Trips.Remove(trip);
+                }
+
+                // Удаляем сам груз
                 _context.Cargos.Remove(cargo);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool CargoExists(int id)
         {

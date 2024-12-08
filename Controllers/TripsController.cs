@@ -87,6 +87,9 @@ namespace TransportCompany.Controllers
             }
 
             var trip = await _context.Trips
+                .Include(t => t.Car)
+                .Include(t => t.Cargo)
+                .Include (t => t.Driver)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (trip == null)
             {
@@ -248,15 +251,21 @@ namespace TransportCompany.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var trip = await _context.Trips.FindAsync(id);
+            var trip = await _context.Trips
+                .Include(t => t.Car)
+                .Include(t => t.Cargo)
+                .Include(t => t.Driver)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (trip != null)
             {
                 _context.Trips.Remove(trip);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool TripExists(int id)
         {

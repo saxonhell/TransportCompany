@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DSXgPb7va0umzpirnT7jC2HUr8XuzwdaC2WOEVsygVBVtLBwZPUhxyZnmZNy635ijEhv1jXM1o4t0fohCpcDfQ==",
+  "dgSpecHash": "o7T2D0VrewGs78Ign4vnxK55ZVfos9O6BHgb5OF7yi8BuM36g4aGt6XLUSqxCPS2H72FPohOMbtPKAeaFhyejw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\Curs\\TransportCompany\\TransportCompany.csproj",
+  "projectFilePath": "C:\\Users\\saxon\\OneDrive\\Рабочий стол\\курсач\\TransportCompany\\TransportCompany.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\saxon\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\saxon\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

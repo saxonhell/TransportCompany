@@ -153,6 +153,7 @@ namespace TransportCompany.Controllers
             }
 
             var carBrand = await _context.CarBrands
+                .Include(cb => cb.Cars) // Подключаем связанные машины
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (carBrand == null)
             {
@@ -167,15 +168,34 @@ namespace TransportCompany.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var carBrand = await _context.CarBrands.FindAsync(id);
+            var carBrand = await _context.CarBrands
+                .Include(cb => cb.Cars)
+                .ThenInclude(cb => cb.Trips)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (carBrand != null)
             {
+                // Удаляем все автомобили, связанные с этим брендом
+                foreach (var car in carBrand.Cars.ToList())
+                {
+                    // Удаляем все поездки, связанные с автомобилем
+                    foreach (var trip in car.Trips.ToList())
+                    {
+                        _context.Trips.Remove(trip);
+                    }
+
+                    _context.Cars.Remove(car);  // Удаляем автомобиль
+                }
+
+                // Теперь можно удалить сам бренд
                 _context.CarBrands.Remove(carBrand);
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool CarBrandExists(int id)
         {

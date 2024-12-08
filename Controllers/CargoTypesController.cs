@@ -160,7 +160,7 @@ namespace TransportCompany.Controllers
             }
 
             var cargoType = await _context.CargoTypes
-                .Include(c => c.CarType)
+                .Include(c => c.Cargos)  // Подключаем связанные грузы
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cargoType == null)
             {
@@ -175,15 +175,21 @@ namespace TransportCompany.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cargoType = await _context.CargoTypes.FindAsync(id);
+            var cargoType = await _context.CargoTypes
+                .Include(ct => ct.Cargos)  // Подключаем связанные грузы
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cargoType != null)
             {
+                // Каскадное удаление всех грузов, связанных с этим типом
                 _context.CargoTypes.Remove(cargoType);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private bool CargoTypeExists(int id)
         {

@@ -169,6 +169,8 @@ namespace TransportCompany.Controllers
             }
 
             var employee = await _context.Employees
+                .Include(e => e.CarDrivers)  // Водители
+                .Include(e => e.CarMechanics)  // Механики
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -183,15 +185,31 @@ namespace TransportCompany.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
+            var employee = await _context.Employees
+                .Include(e => e.CarDrivers)  // Водители
+                .Include(e => e.CarMechanics)  // Механики
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (employee != null)
             {
+                // Убираем все машины, где сотрудник является водителем или механиком
+                foreach (var car in employee.CarDrivers.ToList())
+                {
+                    car.DriverId = null;
+                }
+                foreach (var car in employee.CarMechanics.ToList())
+                {
+                    car.MechanicId = null;
+                }
+
+                // Удаляем самого сотрудника
                 _context.Employees.Remove(employee);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool EmployeeExists(int id)
         {
